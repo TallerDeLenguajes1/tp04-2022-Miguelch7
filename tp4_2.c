@@ -15,6 +15,7 @@ void mostrarTareas(Tarea** listadoTareas, int cantidadTareas, Tarea** listadoTar
 void mostrarTarea(Tarea* tarea);
 void mostrarTareasRealizadas(Tarea** listadoTareasRealizadas, int cantidadTareas);
 void mostrarTareasPendientes(Tarea** listadoTareas, int cantidadTareas);
+void liberarMemoria(Tarea** listadoTareas, Tarea** listadoTareasRealizadas, int cantidadTareas);
 
 
 int main() {
@@ -39,6 +40,8 @@ int main() {
     mostrarTareasRealizadas(listadoTareasRealizadas, cantidadTareas);
     
     mostrarTareasPendientes(listadoTareas, cantidadTareas);
+
+    liberarMemoria(listadoTareas, listadoTareasRealizadas, cantidadTareas);
     
     return 0;
 };
@@ -117,4 +120,24 @@ void mostrarTareasPendientes(Tarea** listadoTareas, int cantidadTareas) {
             mostrarTarea(listadoTareas[i]);
         };
     };
+};
+
+void liberarMemoria(Tarea** listadoTareas, Tarea** listadoTareasRealizadas, int cantidadTareas) {
+    
+    for (int i = 0; i < cantidadTareas; i++) {
+
+        if (listadoTareas[i] != NULL) {
+            free(listadoTareas[i]->descripcion);
+        };
+
+        if (listadoTareasRealizadas[i] != NULL) {
+            free(listadoTareasRealizadas[i]->descripcion);
+        };
+        
+        free(listadoTareas[i]);
+        free(listadoTareasRealizadas[i]);
+    };
+
+    free(listadoTareas);
+    free(listadoTareasRealizadas);
 };
