@@ -30,6 +30,7 @@ int main() {
     fflush(stdin);
 
     listadoTareas = (Tarea**) malloc( sizeof(Tarea*) * cantidadTareas );
+    listadoTareasRealizadas = (Tarea**) malloc( sizeof(Tarea*) * cantidadTareas );
 
     cargarTareas(listadoTareas, cantidadTareas);
 
@@ -80,7 +81,6 @@ void mostrarTareas(Tarea** listadoTareas, int cantidadTareas, Tarea** listadoTar
         scanf("%d", &realizada);
 
         if ( realizada == 1 ) {
-            listadoTareasRealizadas[i] = (Tarea*) malloc( sizeof(Tarea) );
             listadoTareasRealizadas[i] = listadoTareas[i];
             listadoTareas[i] = NULL;
         } else {
