@@ -16,13 +16,15 @@ void mostrarTarea(Tarea* tarea);
 void mostrarTareasRealizadas(Tarea** listadoTareasRealizadas, int cantidadTareas);
 void mostrarTareasPendientes(Tarea** listadoTareas, int cantidadTareas);
 void liberarMemoria(Tarea** listadoTareas, Tarea** listadoTareasRealizadas, int cantidadTareas);
+Tarea* buscarTarea(Tarea** listadoTareas, Tarea** listadoTareasRealizadas, int cantidadTareas, int idTarea);
+
 
 
 int main() {
 
     srand((int) time(NULL));
 
-    int cantidadTareas;
+    int cantidadTareas, idTareaABuscar;
     Tarea** listadoTareas;
     Tarea** listadoTareasRealizadas;
 
@@ -40,6 +42,17 @@ int main() {
     mostrarTareasRealizadas(listadoTareasRealizadas, cantidadTareas);
     
     mostrarTareasPendientes(listadoTareas, cantidadTareas);
+
+    printf("Ingrese el id de la tarea que desea buscar: ");
+    scanf("%d", &idTareaABuscar);
+    fflush(stdin);
+    
+    if (buscarTarea(listadoTareas, listadoTareasRealizadas, cantidadTareas, idTareaABuscar)) {
+        printf("\nLa tarea de id \'%d\' es:", idTareaABuscar);
+        mostrarTarea(buscarTarea(listadoTareas, listadoTareasRealizadas, cantidadTareas, idTareaABuscar));
+    } else {
+        printf("No se ha encontrado una tarea con ID \'%d\'", idTareaABuscar);
+    };
 
     liberarMemoria(listadoTareas, listadoTareasRealizadas, cantidadTareas);
     
@@ -140,4 +153,16 @@ void liberarMemoria(Tarea** listadoTareas, Tarea** listadoTareasRealizadas, int 
 
     free(listadoTareas);
     free(listadoTareasRealizadas);
+};
+
+Tarea* buscarTarea(Tarea** listadoTareas, Tarea** listadoTareasRealizadas, int cantidadTareas, int idTarea) {
+    for (int i = 0; i < cantidadTareas; i++) {
+        if (listadoTareas[i] != NULL && listadoTareas[i]->tareaID == idTarea) {
+            return listadoTareas[i];
+        } else if (listadoTareasRealizadas[i] != NULL && listadoTareasRealizadas[i]->tareaID == idTarea) {
+            return listadoTareasRealizadas[i];
+        };
+    };
+
+    return NULL;
 };
