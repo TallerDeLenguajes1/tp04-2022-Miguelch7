@@ -16,14 +16,14 @@ void mostrarTarea(Tarea* tarea);
 void mostrarTareasRealizadas(Tarea** listadoTareasRealizadas, int cantidadTareas);
 void mostrarTareasPendientes(Tarea** listadoTareas, int cantidadTareas);
 void liberarMemoria(Tarea** listadoTareas, Tarea** listadoTareasRealizadas, int cantidadTareas);
-Tarea* buscarTarea(Tarea** listadoTareas, Tarea** listadoTareasRealizadas, int cantidadTareas, char *palabraClave);
-
+Tarea* busquedaPorPalabra(Tarea** listadoTareas, Tarea** listadoTareasRealizadas, int cantidadTareas, char *palabraClave);
+Tarea* busquedaPorId(Tarea** listadoTareas, Tarea** listadoTareasRealizadas, int cantidadTareas, int idTarea);
 
 int main() {
 
     srand((int) time(NULL));
 
-    int cantidadTareas;
+    int cantidadTareas, idTareaABuscar;
     Tarea** listadoTareas;
     Tarea** listadoTareasRealizadas;
 
@@ -42,13 +42,26 @@ int main() {
     
     mostrarTareasPendientes(listadoTareas, cantidadTareas);
 
-    if (buscarTarea(listadoTareas, listadoTareasRealizadas, cantidadTareas, "Desarrollar")) {
-        printf("\nLa tarea encontrada es:");
-        mostrarTarea(buscarTarea(listadoTareas, listadoTareasRealizadas, cantidadTareas, "Desarrollar"));
+    // Búsqueda por id
+    printf("\nIngrese el id de la tarea que desea buscar: ");
+    scanf("%d", &idTareaABuscar);
+    fflush(stdin);
+    
+    if (busquedaPorId(listadoTareas, listadoTareasRealizadas, cantidadTareas, idTareaABuscar)) {
+        printf("\nLa tarea de id \'%d\' es:", idTareaABuscar);
+        mostrarTarea(busquedaPorId(listadoTareas, listadoTareasRealizadas, cantidadTareas, idTareaABuscar));
+    } else {
+        printf("No se ha encontrado una tarea con ID \'%d\'", idTareaABuscar);
+    };
+
+    // Búsqueda por palabra clave
+    if (busquedaPorPalabra(listadoTareas, listadoTareasRealizadas, cantidadTareas, "Desarrollar")) {
+        printf("\nLa tarea que contiene la palabra \'Desarrollar\' es:");
+        mostrarTarea(busquedaPorPalabra(listadoTareas, listadoTareasRealizadas, cantidadTareas, "Desarrollar"));
     } else {
         printf("No se ha encontrado una tarea con esa palabra");
-    }
-    
+    };
+
     liberarMemoria(listadoTareas, listadoTareasRealizadas, cantidadTareas);
     
     return 0;
@@ -150,11 +163,23 @@ void liberarMemoria(Tarea** listadoTareas, Tarea** listadoTareasRealizadas, int 
     free(listadoTareasRealizadas);
 };
 
-Tarea* buscarTarea(Tarea** listadoTareas, Tarea** listadoTareasRealizadas, int cantidadTareas, char *palabraClave) {
+Tarea* busquedaPorPalabra(Tarea** listadoTareas, Tarea** listadoTareasRealizadas, int cantidadTareas, char *palabraClave) {
     for (int i = 0; i < cantidadTareas; i++) {
         if (listadoTareas[i] != NULL && strstr(listadoTareas[i]->descripcion, palabraClave) != NULL) {
             return listadoTareas[i];
         } else if (listadoTareasRealizadas[i] != NULL && strstr(listadoTareasRealizadas[i]->descripcion, palabraClave) != NULL) {
+            return listadoTareasRealizadas[i];
+        };
+    };
+
+    return NULL;
+};
+
+Tarea* busquedaPorId(Tarea** listadoTareas, Tarea** listadoTareasRealizadas, int cantidadTareas, int idTarea) {
+    for (int i = 0; i < cantidadTareas; i++) {
+        if (listadoTareas[i] != NULL && listadoTareas[i]->tareaID == idTarea) {
+            return listadoTareas[i];
+        } else if (listadoTareasRealizadas[i] != NULL && listadoTareasRealizadas[i]->tareaID == idTarea) {
             return listadoTareasRealizadas[i];
         };
     };
