@@ -16,6 +16,7 @@ void mostrarTarea(Tarea* tarea);
 void mostrarTareasRealizadas(Tarea** listadoTareasRealizadas, int cantidadTareas);
 void mostrarTareasPendientes(Tarea** listadoTareas, int cantidadTareas);
 void liberarMemoria(Tarea** listadoTareas, Tarea** listadoTareasRealizadas, int cantidadTareas);
+Tarea* buscarTarea(Tarea** listadoTareas, Tarea** listadoTareasRealizadas, int cantidadTareas, char *palabraClave);
 
 
 int main() {
@@ -41,6 +42,13 @@ int main() {
     
     mostrarTareasPendientes(listadoTareas, cantidadTareas);
 
+    if (buscarTarea(listadoTareas, listadoTareasRealizadas, cantidadTareas, "Desarrollar")) {
+        printf("\nLa tarea encontrada es:");
+        mostrarTarea(buscarTarea(listadoTareas, listadoTareasRealizadas, cantidadTareas, "Desarrollar"));
+    } else {
+        printf("No se ha encontrado una tarea con esa palabra");
+    }
+    
     liberarMemoria(listadoTareas, listadoTareasRealizadas, cantidadTareas);
     
     return 0;
@@ -140,4 +148,16 @@ void liberarMemoria(Tarea** listadoTareas, Tarea** listadoTareasRealizadas, int 
 
     free(listadoTareas);
     free(listadoTareasRealizadas);
+};
+
+Tarea* buscarTarea(Tarea** listadoTareas, Tarea** listadoTareasRealizadas, int cantidadTareas, char *palabraClave) {
+    for (int i = 0; i < cantidadTareas; i++) {
+        if (listadoTareas[i] != NULL && strstr(listadoTareas[i]->descripcion, palabraClave) != NULL) {
+            return listadoTareas[i];
+        } else if (listadoTareasRealizadas[i] != NULL && strstr(listadoTareasRealizadas[i]->descripcion, palabraClave) != NULL) {
+            return listadoTareasRealizadas[i];
+        };
+    };
+
+    return NULL;
 };
